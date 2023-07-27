@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <!-- 뷰 설치  -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> 
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+    }
+
+    div {
+      text-align: center;
+      margin: 30px auto;
+    }
+
+    #count {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    #computed {
+      font-size: 16px;
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      background-color: #0e8010;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+
+    button:hover {
+      background-color: #00b35a;
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <script>
+    const app = Vue.createApp({
+      template: /*html*/`
+        <div>{{count}}</div>
+        <div>{{countText}}</div>
+        <button @click="plusCount">+</button>
+        <button v-on:click="minusCount">-</button>
+      `,
+      data(){
+        return {
+          count: 0
+        }
+      },
+      methods: {
+        plusCount() {
+          this.count++;
+        },
+        minusCount() {
+          this.count--;
+        },
+      },
+      computed: {
+        countText() {
+          return this.count <=5 ? '카운터가 5보다 작거나 같습니다.': "카운터가 5보다 큽니다."
+        }
+      }
+    })
+
+    app.mount('#app')
+  </script>
+</body>
+
+</html> 

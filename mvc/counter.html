@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+    }
+
+    div {
+      text-align: center;
+      margin: 30px auto;
+    }
+
+    #count {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    #computed {
+      font-size: 16px;
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <div id="count">0</div>
+    <div id="computed"></div>
+    <button id="plus">+</button>
+    <button id="minus">-</button>
+  </div>
+  <script>
+    const plusButton = document.getElementById('plus'); // dom (V)
+    const minusButton = document.getElementById('minus'); // dom (V)
+    const count = document.getElementById('count'); // dom (V)
+    const computed = document.getElementById('computed') // dom (V)
+    let countNumber = 0 //  (M)
+    let computedValue = countNumber <= 5 ? "카운터 값이 5보다 작거나 같습니다.": "카운터 값이 5보다 큽니다."
+
+    computed.innerText = computedValue; // V
+
+    function applyComputedValue(originValue){ // C 
+      computedValue = originValue <= 5 ? "카운터 값이 5보다 작거나 같습니다.": "카운터 값이 5보다 큽니다."; // 인자를 받아 computedValue 변경 (M)
+      computed.innerText = computedValue; // 변경된 값으로 뷰를 변경 (V)
+    }
+
+    plusButton.addEventListener('click', function() { // (C)
+      countNumber++; // 카운터 데이터도 조작 (C-M)
+      count.innerText = countNumber; // Dom 조작 (C-V)
+    })
+    plusButton.addEventListener('click', function() {
+      applyComputedValue(countNumber)
+    })
+
+    minusButton.addEventListener('click', function(){ // (C)
+      countNumber--; // (C-M)
+      count.innerText = countNumber; // (C-V)
+    } )
+    minusButton.addEventListener('click', function(){ // (C)
+      applyComputedValue(countNumber)
+    } )
+  </script>
+</body>
+</html>
