@@ -95,7 +95,7 @@
     <input v-model="newTodoText" type="text" placeholder="Enter your task...">
     <button @click="addTodo">Add</button>
     <ul>
-      <li v-for="todo in todos" :key="todo.id">
+      <li v-for="todo in todos" v-bind:key="todo.id">
         <input type="checkbox" v-model="todo.completed">
         <span>{{ todo.text }}</span>
         <button @click="deleteTodo(todo.id)" class="deleteBtn">Delete</button>
