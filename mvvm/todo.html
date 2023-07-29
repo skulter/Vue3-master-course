@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 30px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      box-sizing: border-box;
+      margin: 0;
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+
+    button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 16px;
+      background-color: #0e8010;
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #00b35a;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    li input[type="checkbox"] {
+      margin-right: 10px;
+    }
+
+    .deleteBtn {
+      max-width: 100px;
+      margin-left: auto;
+      background-color: #dc3545;
+    }
+
+    .deleteBtn:hover {
+      background-color: #b02a37;
+    }
+
+    span {
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+  </div>
+</body>
+<script>
+  const app = Vue.createApp({
+    template: /*html*/`
+    <h1>Todo List</h1>
+    <input v-model="newTodoText" type="text" placeholder="Enter your task...">
+    <button @click="addTodo">Add</button>
+    <ul>
+      <li v-for="todo in todos" :key="todo.id">
+        <input type="checkbox" v-model="todo.completed">
+        <span>{{ todo.text }}</span>
+        <button @click="deleteTodo(todo.id)" class="deleteBtn">Delete</button>
+      </li>
+    </ul>
+    `,
+    data() {
+        return {
+          todos: [],
+          newTodoText: ''
+        };
+      },
+      methods: {
+        addTodo() {
+          const todoText = this.newTodoText.trim();
+          if (todoText !== '') {
+            this.todos.push({
+              id: this.todos.length + 1,
+              text: todoText,
+              completed: false,
+            });
+            this.newTodoText = '';
+          }
+        },
+        deleteTodo(todoId) {
+          this.todos = this.todos.filter(todo => todo.id !== todoId);
+        },
+      },
+  })
+  app.mount('.container')
+</script>
+</html>

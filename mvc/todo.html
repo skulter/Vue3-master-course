@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 400px;
+  margin: 30px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+input[type="text"] {
+  box-sizing: border-box;
+  margin: 0;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+li input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+.deleteBtn {
+  max-width: 100px;
+  margin-left: auto;
+  background-color: #dc3545;
+}
+
+.deleteBtn:hover {
+  background-color: #b02a37;
+}
+
+span {
+  flex: 1;
+}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Todo List</h1>
+    <input type="text" id="todoInput" placeholder="Enter your task...">
+    <button id="addBtn">Add</button>
+    <ul id="todoList">
+
+    </ul>
+  </div>
+  <script>
+    const model = {
+      todos: [],
+      
+      addTodo: function(todoText) {
+        this.todos.push({
+          id: this.todos.length + 1,
+          text: todoText,
+          completed: false,
+        });
+      },
+
+      toggleTodo: function(todoId) {
+        this.todos = this.todos.map(todo => {
+          if(todo.id === todoId) {
+            return {
+              ...todo,
+              completed: !todo.completed,
+            }
+          };
+          return todo;
+        })
+      },
+
+      deleteTodo: function(todoId) {
+        this.todos = this.todos.filter(todo => todo.id !== todoId);
+      }
+    }
+
+
+    const view = {
+      todoList: document.getElementById('todoList'),
+      render: function(todos) {
+        this.todoList.innerHTML = '';
+        todos.forEach(todo => {
+          const li = document.createElement('li');
+          li.innerHTML = /*html*/`
+            <input 
+              type="checkbox" 
+              data-id="${todo.id}"
+              ${todo.completed ? 'checked' : '' }
+            >
+            <span>${todo.text}</span>
+            <button data-id="${todo.id}" class="deleteBtn">Delete</button>
+          `;
+          
+          this.todoList.appendChild(li);
+        });
+      }
+    }
+
+    const controller = {
+      init: function() {
+        this.bindEventListeners();
+        this.render();
+      },
+
+      bindEventListeners: function() {
+        document.getElementById('addBtn').addEventListener(
+          'click', this.handleAddTodo.bind(this)
+        );
+        document.getElementById('todoList').addEventListener(
+          'click', this.handleTodoListClick.bind(this)
+        );
+      },
+
+      handleAddTodo: function() {
+        const todoInput = document.getElementById('todoInput');
+        const todoText = todoInput.value.trim();
+
+        if (todoText !== ''){
+          model.addTodo(todoText);
+          todoInput.value = '';
+          this.render();
+        }
+      },
+
+      handleTodoListClick: function(event) {
+        const target = event.target;
+
+        if(target.tagName === "INPUT") {
+          const todoId = Number(target.dataset.id);
+          model.toggleTodo(todoId);
+          this.render();
+        } else if (target.classList.contains('deleteBtn')) {
+          const todoId = Number(target.dataset.id);
+          model.deleteTodo(todoId);
+          this.render();
+        }
+      },
+
+      render: function() {
+        view.render(model.todos);
+      }
+    }
+
+    controller.init();
+  </script>
+</body>
+</html>
