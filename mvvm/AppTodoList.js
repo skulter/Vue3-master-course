@@ -8,7 +8,7 @@
   template: /*html*/`
   <h1>Todo List</h1>
   <input v-model="newTodoText" type="text" placeholder="Enter your task...">
-  <button @click="$emit('addTodo', newTodoText)">Add</button>
+  <button @click="addTodo">Add</button>
   <ul>
     <li v-for="todo in todos" v-bind:key="todo.id">
       <input type="checkbox" v-model="todo.completed">
@@ -21,8 +21,14 @@
   </ul>
   `,
   data() {
-      return {
-        newTodoText: ''
-      };
-    },
+    return {
+      newTodoText: ''
+    };
+  },
+  methods: {
+    addTodo() {
+      this.$emit('addTodo', this.newTodoText)
+      this.newTodoText = '' 
+    }
+  }
 })
