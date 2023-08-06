@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import postDummy from '@/json/posts.json'
-import { ref } from 'vue'
+import { http } from '@/api/config'
+import { computed, ref } from 'vue'
 import PostTablePagination from './PostTablePagination.vue'
 
 type Post = {
@@ -12,12 +12,15 @@ type Post = {
 
 const MAX_COUNT = 10 //한 페이지에 보여줄 TD
 
-const posts = ref<Post[]>(postDummy)
+const posts = ref<Post[]>([])
 const currentPage = ref(1)
-const totalPages = ref(posts.value.length / MAX_COUNT)
+const totalPages = computed(() => posts.value.length / MAX_COUNT)
 
 /** methods */
 const updatePage = (page: number) => (currentPage.value = page)
+http.get('/posts').then(({ data }) => {
+  posts.value = data
+})
 </script>
 
 <template>
