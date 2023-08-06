@@ -2,8 +2,9 @@
 module.exports = {
   content: [],
   theme: {
-    extend: {},
+    extend: {}
   },
-  plugins: [],
+  darkMode: false,
+  purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
+  plugins: []
 }
-
