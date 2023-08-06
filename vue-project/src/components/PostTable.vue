@@ -1,6 +1,23 @@
 <script setup lang="ts">
 import postDummy from '@/json/posts.json'
-const posts = postDummy
+import { ref } from 'vue'
+import PostTablePagination from './PostTablePagination.vue'
+
+type Post = {
+  id: number
+  userId: number
+  title: string
+  body: string
+}
+
+const MAX_COUNT = 10 //한 페이지에 보여줄 TD
+
+const posts = ref<Post[]>(postDummy)
+const currentPage = ref(1)
+const totalPages = ref(posts.value.length / MAX_COUNT)
+
+/** methods */
+const updatePage = (page: number) => (currentPage.value = page)
 </script>
 
 <template>
@@ -14,9 +31,8 @@ const posts = postDummy
       </tr>
     </thead>
     <tbody>
-      <!-- post - id, userId, title, body -->
       <tr
-        v-for="post in posts"
+        v-for="post in posts.slice(MAX_COUNT * (currentPage - 1), MAX_COUNT * currentPage)"
         :key="post.id"
         class="border-b transition duration-300 ease-in-out border-neutral-500 bg-neutral-700 hover:bg-neutral-600"
       >
@@ -29,4 +45,9 @@ const posts = postDummy
       </tr>
     </tbody>
   </table>
+  <PostTablePagination
+    :total-pages="totalPages"
+    :current-page="currentPage"
+    @update:current-page="updatePage"
+  />
 </template>
