@@ -1,14 +1,8 @@
 <script setup lang="ts">
 import { http } from '@/api/config'
+import type { Post } from '@/types'
 import { computed, ref } from 'vue'
 import PostTablePagination from './PostTablePagination.vue'
-
-type Post = {
-  id: number
-  userId: number
-  title: string
-  body: string
-}
 
 const MAX_COUNT = 10 //한 페이지에 보여줄 TD
 
