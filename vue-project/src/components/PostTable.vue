@@ -18,7 +18,7 @@ http.get('/posts').then(({ data }) => {
 })
 
 const gotoPage = (id: number) => {
-  router.push(`/post/${id}`)
+  router.push({ name: 'PostView', params: { id } })
 }
 </script>
 

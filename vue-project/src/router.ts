@@ -9,11 +9,13 @@ const router = VueRouter.createRouter({
   routes: [
     {
       path: '/post',
-      component: PostTableView
+      component: PostTableView,
+      name: 'PostTableView'
     },
     {
       path: '/post/:id',
       component: PostView,
+      name: 'PostView',
       beforeEnter(to, from, next) {
         if (to.params.id != from.params.id) {
           Nprogress.start() // api 호출 전 !
