@@ -2,13 +2,18 @@
 import { http } from '@/api/config'
 import images from '@/assets/image'
 import type { Post } from '@/types'
+import Nprogress from 'nprogress'
 import { computed, ref } from 'vue'
 import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router'
 
 const router = useRouter()
 const route = useRoute()
 
-const post = ref<Post>({} as Post) // < - we will fix this later
+const props = defineProps<{
+  post: Post
+}>()
+
+const post = ref<Post>(props.post) // < - we will fix this later
 
 // api를 호출해봅시다.
 // watch(
@@ -25,8 +30,14 @@ const post = ref<Post>({} as Post) // < - we will fix this later
 // api 호출 두번째 방법! navigation guard
 onBeforeRouteUpdate(async (to, from) => {
   if (to.params.id !== from.params.id) {
-    const { data } = await http.get(`/posts/${to.params.id}`)
-    post.value = data
+    Nprogress.start()
+    try {
+      const { data } = await http.get(`/posts/${to.params.id}`)
+      Nprogress.done()
+      post.value = data
+    } catch (e) {
+      Nprogress.done()
+    }
   }
 })
 
