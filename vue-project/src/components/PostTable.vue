@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { http } from '@/api/config'
+import router from '@/router'
 import type { Post } from '@/types'
 import { computed, ref } from 'vue'
 import PostTablePagination from './PostTablePagination.vue'
@@ -15,6 +16,10 @@ const updatePage = (page: number) => (currentPage.value = page)
 http.get('/posts').then(({ data }) => {
   posts.value = data
 })
+
+const gotoPage = (id: number) => {
+  router.push(`/post/${id}`)
+}
 </script>
 
 <template>
@@ -32,6 +37,7 @@ http.get('/posts').then(({ data }) => {
         v-for="post in posts.slice(MAX_COUNT * (currentPage - 1), MAX_COUNT * currentPage)"
         :key="post.id"
         class="border-b transition duration-300 ease-in-out border-neutral-500 bg-neutral-700 hover:bg-neutral-600"
+        @click="gotoPage(post.id)"
       >
         <td class="px-6 py-4 text-center">{{ post.id }}</td>
         <td class="px-6 py-4 text-center">{{ post.userId }}</td>

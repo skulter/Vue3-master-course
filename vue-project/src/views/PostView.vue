@@ -1,14 +1,39 @@
 <script setup lang="ts">
+import { http } from '@/api/config'
+import images from '@/assets/image'
 import type { Post } from '@/types'
-import { ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { computed, ref } from 'vue'
+import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router'
 
 const router = useRouter()
 const route = useRoute()
 
 const post = ref<Post>({} as Post) // < - we will fix this later
 
-const image = { array: [] }
+// api를 호출해봅시다.
+// watch(
+//   () => route.params.id,
+//   async () => {
+//     const { data } = await http.get(`/posts/${route.params.id}`)
+//     post.value = data
+//   },
+//   {
+//     immediate: true
+//   }
+// )
+
+// api 호출 두번째 방법! navigation guard
+onBeforeRouteUpdate(async (to, from) => {
+  if (to.params.id !== from.params.id) {
+    const { data } = await http.get(`/posts/${to.params.id}`)
+    post.value = data
+  }
+})
+
+const imageSrc = computed(() => {
+  const id = Number(route.params.id)
+  return images.array[Math.ceil(id % 12)]
+})
 
 const movePage = (to: 'next' | 'prev') => {
   const postId = Number(route.params.id)
@@ -25,7 +50,7 @@ const movePage = (to: 'next' | 'prev') => {
 <template>
   <div class="my-10 bg-slate-800 rounded-3xl">
     <div class="max-w-sm rounded overflow-hidden shadow-lg">
-      <img />
+      <img :src="imageSrc" />
       <div class="px-6 py-4">
         <div class="font-bold text-xl mb-2">{{ post.title }}</div>
         <p class="text-orange-300 text-base">
