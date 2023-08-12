@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { http } from '@/api/config'
 import images from '@/assets/image'
+import { usePostStore } from '@/store/post'
 import type { Post } from '@/types'
 import Nprogress from 'nprogress'
 import { computed, ref } from 'vue'
@@ -12,6 +13,8 @@ const route = useRoute()
 const props = defineProps<{
   post: Post
 }>()
+
+const postStore = usePostStore()
 
 const post = ref<Post>(props.post) // < - we will fix this later
 
@@ -50,7 +53,7 @@ const movePage = (to: 'next' | 'prev') => {
   const postId = Number(route.params.id)
 
   // check max page with dynamic number (later!! )
-  if (to == 'next' && postId < 100) {
+  if (to == 'next' && postId < postStore.posts.length) {
     router.push(`${Number(route.params.id) + 1}`)
   } else if (to == 'prev' && postId > 1) {
     router.push(`${Number(route.params.id) - 1}`)

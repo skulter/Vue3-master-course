@@ -1,28 +1,28 @@
 <script setup lang="ts">
+import { usePostStore } from '@/store/post'
 import { computed } from 'vue'
 
 interface PostTablePaginationProps {
-  totalPages: number
   currentPage: number
 }
 
 const props = defineProps<PostTablePaginationProps>()
-
+const postStore = usePostStore()
 /** computed value */
 const pages = computed(() => {
   if (props.currentPage + 1 < 6) {
-    if (props.totalPages < 6) {
+    if (postStore.totalPages < 6) {
       return Array.from({ length: 5 }, (_, i) => i + 1) // [1,2,3,4,5];
     }
 
-    return [1, 2, 3, 4, '...', props.totalPages]
+    return [1, 2, 3, 4, '...', postStore.totalPages]
   }
 
-  if (props.currentPage >= props.totalPages - 1) {
-    return [1, 2, '...', props.totalPages - 1, props.totalPages]
+  if (props.currentPage >= postStore.totalPages - 1) {
+    return [1, 2, '...', postStore.totalPages - 1, postStore.totalPages]
   }
 
-  return [1, 2, '...', props.currentPage, '....', props.totalPages]
+  return [1, 2, '...', props.currentPage, '....', postStore.totalPages]
 })
 </script>
 
@@ -57,7 +57,7 @@ const pages = computed(() => {
           {{ Number.isInteger(page) ? Number(page) : '...' }}
         </a>
         <a
-          v-if="currentPage < totalPages"
+          v-if="currentPage < postStore.totalPages"
           href="#"
           class="px-4 py-2 font-bold border-neutral-500 bg-neutral-700 hover:bg-neutral-600 rounded-md"
           @click="$emit('update:currentPage', currentPage + 1)"

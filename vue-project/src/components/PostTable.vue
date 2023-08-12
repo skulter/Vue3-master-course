@@ -1,21 +1,18 @@
 <script setup lang="ts">
-import { http } from '@/api/config'
 import router from '@/router'
-import type { Post } from '@/types'
-import { computed, ref } from 'vue'
+import { usePostStore } from '@/store/post'
+import { storeToRefs } from 'pinia'
+import { ref } from 'vue'
 import PostTablePagination from './PostTablePagination.vue'
 
 const MAX_COUNT = 10 //한 페이지에 보여줄 TD
 
-const posts = ref<Post[]>([])
+const postStore = usePostStore()
 const currentPage = ref(1)
-const totalPages = computed(() => posts.value.length / MAX_COUNT)
-
+const { posts } = storeToRefs(postStore)
 /** methods */
 const updatePage = (page: number) => (currentPage.value = page)
-http.get('/posts').then(({ data }) => {
-  posts.value = data
-})
+postStore.fetchPosts()
 
 const gotoPage = (id: number) => {
   router.push({ name: 'PostView', params: { id } })
@@ -48,9 +45,5 @@ const gotoPage = (id: number) => {
       </tr>
     </tbody>
   </table>
-  <PostTablePagination
-    :total-pages="totalPages"
-    :current-page="currentPage"
-    @update:current-page="updatePage"
-  />
+  <PostTablePagination :current-page="currentPage" @update:current-page="updatePage" />
 </template>
