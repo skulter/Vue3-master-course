@@ -41,15 +41,16 @@ const methods  = {
     },
     addTodo: function(e){
         e.preventDefault();
- 
-        if(this.form.todo) {
-            const todoSize = Array.from(this.todos.entries()).length;
-            this.todos.set(todoSize + 1, {
-                id: todoSize + 1,
-                text:  this.form.todo,
-                done: false,
-            });
-            // Map, Set reactivity
+        const todo = this.form.todo
+
+        if(todo) {
+            const random = Math.random() * 10;
+            this.todos.set(random, {
+                id: random,
+                text: todo,
+                done: false
+            })
+            // Vue 2  
             this.todos = new Map(this.todos);
             this.form.todo = ""
         }
