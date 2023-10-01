@@ -35,14 +35,13 @@ const methods  = {
         }
     },
     removeTodo: function(id) {
-        this.todos.delete(id);
-        /** https://v2.vuejs.org/v2/api/#v-for */
-        this.todos = new Map(this.todos)
+        if(this.todos.get(id)?.done) {
+            this.todos.delete(id);
+            /** https://v2.vuejs.org/v2/api/#v-for */
+            this.todos = new Map(this.todos)
+        }
     },
-    addTodo: function(e){
-        e.preventDefault();
-        const todo = this.form.todo
-
+    addTodo: function(todo){
         if(todo) {
             const random = Math.random() * 10;
             this.todos.set(random, {
@@ -60,26 +59,23 @@ const methods  = {
 
 const vm = new Vue({
     el: "#app", // <-- same with // vm.$mount('#app')
+    components: {
+        TodoForm,
+        TodoList
+    },
     data,
     methods,
     template: /* html */`
          <main>
             <section>
-                <form v-on:submit="addTodo" id="todoForm">
-                    <input placeholder="할일을 작성해주세요." type="text" v-model="form.todo" >
-                    <button type="submit">submit</button>
-                </form>
-                <ul>
-                    <li 
-                        v-for="todo in Array.from(todos.values())"
-                        v-bind:key="todo.id"
-                    >
-                        {{ todo.text }}
-                        <button v-on:click="removeTodo(todo.id)">
-                            delete
-                        </button>
-                    </li>
-                </ul>
+                <todo-form
+                    v-on:form-submit="addTodo"
+                    :todo="form.todo"
+                />
+                <todo-list
+                    v-on:remove-todo="removeTodo"
+                    :todos="todos"
+                />
             </section>
         </main>
     `
