@@ -1,11 +1,11 @@
 <script>
   export default {
-    
+    name: "BaseNav",
   }
 </script>
 
 <template>
-  <div class="flex">
+  <nav aria-label="navigation bar">
     <div class="py-5 px-4 flex flex-col w-9">
       <div class="mb-8 h-7">
         <button class="outline-none">
@@ -14,7 +14,7 @@
       </div>
       <div class="flex-grow">
         <nav>
-          <ul 
+          <ul
             class="text-center child:transition-transform child-hover:-translate-y-1 child-hover:scale-110"
           >
             <li>
@@ -42,12 +42,5 @@
         </nav>
       </div>
     </div>
-    <div class="w-full">
-      <div class="w-full px-5 text-center py-1 h-6 text-base"> Tab name </div>
-      <slot></slot>
-    </div>
-  </div>
+  </nav>
 </template>
-
-<style scoped>
-</style>

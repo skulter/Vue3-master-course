@@ -1,12 +1,12 @@
 <script>
-	import HomeLayout from '../ui/Layout/HomeLayout.vue';
+	import BaseLayout from '../ui/Layout/BaseLayout.vue';
 	import HomeTable from "../ui/Home/HomeTable.vue";
 	import HomePagination from "../ui/Home/HomePagination.vue";
 
 	export default {
     computed: {},
     components: { 
-			HomeLayout,
+			BaseLayout,
 			HomeTable,
 			HomePagination,
 		}
@@ -18,10 +18,10 @@
 			class="bg-white"
 			:style="{height: 'window.innerHeight'}"
 		>
-			<HomeLayout>
+			<BaseLayout>
 				<HomeTable/>
 				<HomePagination/>
-			</HomeLayout>
+			</BaseLayout>
 		</div>   
 </template>
 
