@@ -1,0 +1,69 @@
+{
+  "count": 5,
+  "totalCount": 2127,
+  "page": 1,
+  "totalPages": 426,
+  "lastItemIndex": 5,
+  "results": [
+      {
+          "_id": "jQHjwwHpLN",
+          "author": "Thomas Edison",
+          "content": "Results! Why, man, I have gotten a lot of results. I know several thousand things that won't work.",
+          "tags": [
+              "Success",
+              "Failure",
+              "Perseverance"
+          ],
+          "authorSlug": "thomas-edison",
+          "length": 98,
+          "dateAdded": "2023-04-14",
+          "dateModified": "2023-04-14"
+      },
+      {
+          "_id": "An5NAXPrbN",
+          "author": "Thomas Edison",
+          "content": "Hell, there are no rules here-- we're trying to accomplish something.",
+          "tags": [],
+          "authorSlug": "thomas-edison",
+          "length": 69,
+          "dateAdded": "2023-04-14",
+          "dateModified": "2023-04-14"
+      },
+      {
+          "_id": "QfeIDluRi_",
+          "author": "Thomas Edison",
+          "content": "There is no expedient to which a man will not go to avoid the labor of thinking.",
+          "tags": [
+              "Work"
+          ],
+          "authorSlug": "thomas-edison",
+          "length": 80,
+          "dateAdded": "2023-04-14",
+          "dateModified": "2023-04-14"
+      },
+      {
+          "_id": "btV2j1uf2t",
+          "author": "Thomas Edison",
+          "content": "Faith, as well intentioned as it may be, must be built on facts, not fiction--faith in fiction is a damnable false hope.",
+          "tags": [
+              "Religion"
+          ],
+          "authorSlug": "thomas-edison",
+          "length": 120,
+          "dateAdded": "2023-04-14",
+          "dateModified": "2023-04-14"
+      },
+      {
+          "_id": "RKl9iZrjfP",
+          "author": "Charles Dickens",
+          "content": "We need never be ashamed of our tears.",
+          "tags": [
+              "Sadness"
+          ],
+          "authorSlug": "charles-dickens",
+          "length": 38,
+          "dateAdded": "2023-04-14",
+          "dateModified": "2023-04-14"
+      }
+  ]
+}

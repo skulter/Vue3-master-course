@@ -13,10 +13,10 @@
     },
     computed: {
       hasPreviousPage(){
-        return this.currentPage > 0
+        return this.currentPage > 1
       },
       hasNextPage() {
-        return this.currentPage < this.totalPages
+        return this.currentPage < this.totalPages && this.currentPage !== 0
       }
     }
   }

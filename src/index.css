@@ -52,3 +52,6 @@
   font-display: swap;
 }
 
+* {
+  font-family:Verdana, "Noto Sans KR", Geneva, Tahoma, sans-serif
+}

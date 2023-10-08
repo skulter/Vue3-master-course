@@ -2,7 +2,7 @@ import plugins from "./plugins/addVariants"
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  plugins,
+  plugins: [...plugins, require("tailwind-scrollbar-hide")],
   content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   theme: {
     extend: {
@@ -28,12 +28,19 @@ module.exports = {
         12: "96px",
         13: "112px",
         14: "160px",
-        15: "208px"
+        15: "208px",
+        16: "314px",
+        17: "474px"
       },
       colors: {
         "vue-green": "#41e015;",
+        "vue-green-light": "#A6FF96",
         "army-green": "#31511f;",
-        "kahlua-green": "#f5fff5;"
+        "kahlua-green": "#f5fff5;",
+        "autumn-beige": "#F9DEC9",
+        "blossom-pink": "#F78CA2",
+        "atomic-red": "#D80032",
+        "grape-purple": "#B931FC"
       },
       fontFamily: {
         sans: ['Roboto', 'Noto Sans KR', 'sans-serif']
