@@ -10,7 +10,11 @@ const routes = [
     component: HomeView,
     name: "HomePage"
   },
-  { path: "/search", component: SearchView },
+  { 
+    path: "/search", 
+    component: SearchView,
+    name: "SearchPage"
+  },
   { 
     path: "/quote/:id", 
     // quote/3, quote/4,5

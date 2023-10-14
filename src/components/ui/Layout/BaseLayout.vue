@@ -16,7 +16,7 @@
     <div class="flex">
       <BaseNav />
       <div class="w-full h-full">
-        <div class="w-full px-5 text-center py-1 h-6 text-base"> Tab name </div>
+        <div class="w-full p-4 text-center h-9 text-md"> Tab name </div>
         <slot></slot>
       </div>
     </div>

@@ -1,25 +1,41 @@
 <script>
   import { getQuote } from "../../apis/getQuotes"
   import BaseLayout from "../ui/Layout/BaseLayout.vue";
-  import BaseIndicator from "../ui/common/BaseIndicator.vue"
+  import BaseIndicator from "../ui/common/BaseIndicator.vue";
+  import QuoteCard from "../ui/Quote/QuoteCard.vue";
+  import { getSingleRandomQuote } from "../../apis/getRandom";
 
   export default {
     components: { 
       BaseLayout,
-      BaseIndicator
+      BaseIndicator,
+      QuoteCard,
     },
     data: function(){
       return {
         quote: {
           meta: {
             isLoading: false
+          },
+          data: null
+        },
+        random: {
+          meta: {
+            isLoading: false,
           }
         }
       }
     },
+    methods: {
+      onClickRandom: async function() {
+        this.random.meta.isLoading = true;
+        const data = await getSingleRandomQuote();
+        this.random.meta.isLoading = false;
+        this.$router.push(data._id);
+      }
+    },
     computed: { 
       quoteId() {
-        console.log(this.$route.params)
         return this.$route.params.id;
       },
       randomId(){
@@ -27,17 +43,20 @@
       },
       isLoading(){ 
         return this.quote.meta.isLoading;
-      }
+      },
+      isRandomLoading() {
+        return this.random.meta.isLoading;
+      },
     },
     async created() {
         try {
           this.quote.meta.isLoading = true 
           const quote = await getQuote(this.quoteId)
-          this.quote = quote;
+          this.quote.data = quote;
           this.quote.meta.isLoading = false;
         }
         catch(e) {
-          if(e.response.status === 404) {
+          if(e.response?.status === 404) {
             this.$router.replace({name: "homePage"})
           }
         }
@@ -54,18 +73,29 @@
           v-if="isLoading"
         />
         <div 
-          class="relative"
           v-else
+          class-="border border-blue-300 shadow rounded-md p-4 max-w-sm w-full mx-auto"
         >
-          <div class="absolute">
-            <div>
-              <h1 class="my-2 text-gray-700 font-bold text-2xl">
-                  {{ quoteId }} 명언 살펴보기
-              </h1>
-              <p class="my-2 text-gray-700">어딜 가야 할까</p>
-              <button class="my-2 border rounded md py-4 px-8 text-center bg-vue-green text-white hover:bg-vue-green focus:outline-none focus:ring-2 focus:ring-vue-green focus:ring-opacity-50">랜덤 명언 찾기</button>
+          <QuoteCard :quote="quote"/>
+          <section>
+            <div class="flex justify-end">
+              <button 
+                @click="onClickRandom"
+                class="my-5 border rounded md py-4 px-8 text-center 
+                 text-white hover:bg-emerald-400  focus:outline-none focus:ring-2 focus:ring-vue-green focus:ring-opacity-50"
+                :disabled="isRandomLoading"
+                :class="{
+                  'bg-emerald-500': !isRandomLoading,
+                  'bg-emerald-400': isRandomLoading
+                }"
+              >
+                <span v-if="!isRandomLoading">랜덤 명언 찾기</span>
+                <BaseIndicator
+                  v-else
+                />
+              </button>
             </div>
-          </div>
+          </section>
         </div>
       </div>
     </div>

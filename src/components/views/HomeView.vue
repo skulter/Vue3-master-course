@@ -21,6 +21,23 @@
 			HomeTable,
 			HomePagination,
 		},
+		methods: {
+			onPageUpdate(flag) {
+				if(flag === 'next') {
+					this.pageInfo.page += 1;
+				}
+				else {
+					this.pageInfo.page -= 1;
+				}
+				this.updateQuotes(this.pageInfo.page)
+			},
+			async updateQuotes(page) {
+				const data = await getQuotes(page)
+				this.pageInfo.page = data.page;
+				this.pageInfo.totalPages = data.totalPages
+				this.quotes = data.results;
+			}
+		},
 		computed: {
 			groups() {
 				return this.quotes.map(quote => ({
@@ -30,12 +47,8 @@
 				}))
 			}
 		},
-		async created() {
-			const data = await getQuotes()
-			this.pageInfo.page = data.page;
-			this.pageInfo.totalPages = data.totalPages
-			this.quotes = data.results;
-			console.log(data)
+		created() {
+			this.updateQuotes(1)
 		}
 	}
 </script>
@@ -47,6 +60,7 @@
 			<HomePagination 
 				:page="pageInfo.page"
 				:total-pages="pageInfo.totalPages"
+				@change-page="onPageUpdate"
 			/>
 		</article>
 	</BaseLayout>
