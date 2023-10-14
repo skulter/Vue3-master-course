@@ -9,5 +9,14 @@ module.exports = defineConfig({
         "~": path.join(__dirname, "src/")
       }
     }
-  }
+  },
+  // devServer: {
+  //   client: {
+  //     // overlay: true,
+      // overlay: {
+      //   // warnings: false,
+      //   errors: true,
+      // }
+  //   }
+  // }
 })

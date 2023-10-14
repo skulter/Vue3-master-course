@@ -1,14 +1,23 @@
 <script>
   export default {
     name: "HomeTable",
-    data: function() {
-      return {
-        groups: [{
-          speaker: "Dante",
-          quote: "Slooooooow but steady"
-        }]
+    props: {
+      groups: {
+        type: Array,
+        default: function() {
+          return [{
+            id: "key",
+            author: "Dante",
+            quote: "Slooooooow but steady"
+          }]
+        }
       }
     },
+    methods: {
+      onClickRow(id) {
+        this.$router.push(`/quote/${id}`)
+      }
+    }
   }
 </script>
 
@@ -29,17 +38,19 @@
               </thead>
               <tbody>
                 <tr
-                  v-for="(group, index) in groups"
-                  :key="group.speaker"
-                  class="border-b honeydew:bg-neutral-700 honey"
+                  v-for="(group,index) in groups"
+                  :key="group.id"
+                  class="border-b honeydew:bg-neutral-700 honey transition-all cursor-pointer
+                    hover:translate-y-1 hover:scale-101 hover:bg-vue-green-light"
                   :class="{
                     'bg-kahlua-green': index % 2 == 1,
                     'bg-white': index & 2 ==0
                   }"
+                  @click="onClickRow(group.id)"
                 >
                   <td class="whitespace-nowrap w-[10%] px-6 py-4 font-medium">{{ index + 1 }}</td>
-                  <td class="whitespace-nowrap w-[70%] px-6 py-4">{{ group.quote }}</td>
-                  <td class="whitespace-nowrap w-[20%] px-6 py-4">@{{group.speaker}}</td>
+                  <td class="whitespace-nowrap w-[70%] px-6 py-4 app-quote-name">{{ group.quote }}</td>
+                  <td class="whitespace-nowrap w-[20%] px-6 py-4">@{{group.author}}</td>
                 </tr>
               </tbody>
             </table>

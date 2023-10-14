@@ -6,17 +6,17 @@
         default: 0,
         type: Number
       },
-      currentPage: {
+      page: {
         default: 0, 
         type: Number
       },
     },
     computed: {
       hasPreviousPage(){
-        return this.currentPage > 1
+        return this.page > 1
       },
       hasNextPage() {
-        return this.currentPage < this.totalPages && this.currentPage !== 0
+        return this.page < this.totalPages && this.page !== 0
       }
     }
   }
@@ -28,6 +28,7 @@
       class="flex justify-center"
     >
       <a href="#" 
+        @click="log('text')"
         class="flex items-center justify-center px-4 h-8 mr-3 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700"
         :class="{
           'bg-white': hasPreviousPage,
@@ -42,7 +43,7 @@
       <span
         class="flex items-center justify-center px-4 h-8 mr-3 text-base font-medium text-gray-500 bg-white rounded-lg"
       >
-        {{ currentPage + 1 }} / {{ totalPages + 1 }}</span>
+        {{ page }} / {{ totalPages }}</span>
       <a 
         href="#" 
         class="flex items-center justify-center px-4 h-8 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700"

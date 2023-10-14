@@ -3,7 +3,7 @@ import { http } from "./http"
 export const getQuotes = async (page = 1) => {
   const { data } = await http.get('/quotes',{
     params: {
-      limit: 5,
+      limit: 10,
       page
     }
   })
@@ -21,5 +21,6 @@ export const getQuote = async (id) => {
     data.thumbnail = `${IMAGE_BASE}/200/${author.slug}.jpg`
     Object.assign(data, author)
   }
+
   return data;  
 }
