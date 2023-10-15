@@ -3,7 +3,7 @@
   import SearchInput from '../ui/Search/SearchInput.vue';
   import BaseIndicator from "../ui/common/BaseIndicator";
   import BaseCard from "../ui/common/BaseCard";
-
+  import BaseCounter from "../ui/common/BaseCounter"
   export default {
     props: {
       
@@ -12,7 +12,8 @@
       BaseLayout,
       SearchInput,
       BaseIndicator,
-      BaseCard
+      BaseCard,
+      BaseCounter
     },
     data: function() {
       return {
@@ -32,6 +33,9 @@
 
 <template>
   <BaseLayout>
+      <BaseCounter name="counter A"/>
+      <BaseCounter name="counter B"/>
+      <BaseCounter name="counter C"/>
     <section class="p-10 flex justify-center">
       <SearchInput/>
     </section>

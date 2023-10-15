@@ -1,6 +1,31 @@
 <script>
+  import { getSearchQuotes } from "../../../apis/getSearchQuotes"
+
+  function debounce(fn , delay) {
+    let timeout = null;
+    
+    return function() {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        fn.apply(this, arguments)
+      }, delay)
+    }
+  }
+
   export default {
     name: "SearchInput",
+    data: function() {
+      return {
+        input: "",
+        quotes: null,
+      }
+    },
+    methods: {
+      onSearchInput: debounce(async function(){
+        const data = await getSearchQuotes(this.input)
+        console.log(data)
+      },300)
+    }
   }
 </script>
 
@@ -18,6 +43,8 @@
         id="default-search" 
         class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-green-500 focus-visible:border-vue-green-light focus:border-vue-green-light" 
         placeholder="Search quotes, speakers" 
+        v-model="input"
+        @input="onSearchInput"
         required
       >
       <button 

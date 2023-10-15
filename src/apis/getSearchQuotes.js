@@ -1,15 +1,19 @@
-import http from "./http";
+import { http } from "./http";
 
 export const getSearchQuotes = async (query) => {
   const { data } = await http.get("/search/quotes",{
-    query,
+    params: {
+      query
+    },
   })
   return data;
 }
 
 export const getSearchAuthors = async (query) => {
   const { data } = await http.get("/search/authors", {
-    query,
+    params: {
+      query
+    },
   })
   return data;
 }
