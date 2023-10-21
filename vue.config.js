@@ -2,6 +2,7 @@ const path = require("path");
 const { defineConfig } = require('@vue/cli-service')
 
 module.exports = defineConfig({
+  runtimeCompiler: true,
   transpileDependencies: true,
   configureWebpack: {
     resolve: {
@@ -10,13 +11,5 @@ module.exports = defineConfig({
       }
     }
   },
-  // devServer: {
-  //   client: {
-  //     // overlay: true,
-      // overlay: {
-      //   // warnings: false,
-      //   errors: true,
-      // }
-  //   }
-  // }
+
 })

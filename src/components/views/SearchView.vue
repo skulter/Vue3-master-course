@@ -3,7 +3,7 @@
   import SearchInput from '../ui/Search/SearchInput.vue';
   import BaseIndicator from "../ui/common/BaseIndicator";
   import BaseCard from "../ui/common/BaseCard";
-  // import BaseCounter from "../ui/common/BaseCounter"
+
   export default {
     props: {
       
@@ -13,11 +13,11 @@
       SearchInput,
       BaseIndicator,
       BaseCard,
-      // BaseCounter
     },
     data: function() {
       return {
-        isSearching: false
+        isSearching: false,
+        searchLists: [],
       }
     },
     computed: {
@@ -27,17 +27,26 @@
         }
         return  "500px"
       }
-    }
+    },
+    methods: {
+      onSearchStart: function() {
+        this.isSearching = true;
+      },
+      onSearchEnd: function(lists) {
+        this.searchLists = lists;
+        this.isSearching = false;
+      }
+    },
   }
 </script>
 
 <template>
   <BaseLayout>
-      <!-- <BaseCounter name="counter A"/>
-      <BaseCounter name="counter B"/>
-      <BaseCounter name="counter C"/> -->
     <section class="p-10 flex justify-center">
-      <SearchInput/>
+      <SearchInput
+        @on-search-start="onSearchStart"
+        @on-search-end="onSearchEnd"
+      />
     </section>
     <section class="p-10 pt-0 flex justify-center align-middle">
       <div 
@@ -53,15 +62,20 @@
           v-else
           class="flex flex-col gap-5"
         >
-          <BaseCard/>
-          <BaseCard/>
-          <BaseCard/>
-          <BaseCard/>
+          <template v-if="searchLists.length > 0">
+            <base-card
+              v-for="item in searchLists"
+              :key="item._id"
+              :author="item.author"
+              :content="item.content"
+              :card-id="item._id"
+            />
+          </template>
+          <div v-else>
+            <div>검색 결과가 없습니다. 다른 명언을 검색해보세요.</div>
+          </div>
         </div>
       </div>
     </section>
-  </BaseLayout>
-</template>
-
-<style>
-</style>
+  </BaseLayout>  
+</template> 

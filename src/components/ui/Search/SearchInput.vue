@@ -22,15 +22,26 @@
     },
     methods: {
       onSearchInput: debounce(async function(){
-        const data = await getSearchQuotes(this.input)
-        console.log(data)
+        if(this.input) {
+          this.$emit('on-search-start');
+          try {
+            const data = await getSearchQuotes(this.input)
+            this.$emit('on-search-end', data.results);
+          } catch (e){
+            console.error(e);
+            this.$emit('on-search-end', []);
+          }
+        }
       },300)
     }
   }
 </script>
 
 <template>
-  <form class="w-17">   
+  <form 
+    class="w-17" 
+    @submit="onSearchInput"
+  >   
     <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
     <div class="relative">
       <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
