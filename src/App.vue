@@ -1,16 +1,20 @@
+<script>
+  import BaseLayout from "./components/ui/Layout/BaseLayout.vue";
+
+  export default {
+    name: 'App',
+    components: {
+      BaseLayout,
+    }
+  }
+</script>
+
+
 <template>
   <div id="app">
-    <router-view :key="$route.fullPath"></router-view>
+    <BaseLayout>
+      <router-view :key="$route.fullPath"></router-view>
+    </BaseLayout>
   </div>
 </template>
 
-<script>
-
-export default {
-  name: 'App',
-  components: {
-    // HomeView,
-    // SearchView,
-}
-}
-</script>

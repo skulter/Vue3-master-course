@@ -2,6 +2,7 @@ import VueRouter from "vue-router";
 import HomeView from "./components/views/HomeView.vue"
 import SearchView from "./components/views/SearchView.vue"
 import QuoteView from "./components/views/QuoteView.vue"
+import FavoriteView from "./components/views/FavoriteView.vue";
 import NoFoundView from "./components/views/NoFoundView.vue";
 
 const routes = [
@@ -17,15 +18,19 @@ const routes = [
   },
   { 
     path: "/quote/:id", 
-    // quote/3, quote/4,5
     component: QuoteView,
-    name: "quotePage",
+    name: "QuotePage",
+  },
+  {
+    path: "/favorite",
+    component: FavoriteView,
+    name: "FavoritePage",
   },
   { 
     path: "*", 
     component: NoFoundView,
     name: "notFoundPage"
-  }
+  },
 ]
 /**
  * dynamic routes

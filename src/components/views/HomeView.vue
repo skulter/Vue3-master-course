@@ -54,16 +54,14 @@
 </script>
 
 <template>
-	<BaseLayout>
-		<article class="flex flex-col gap-8 p-4">
-			<HomeTable :groups="groups"/>
-			<HomePagination 
-				:page="pageInfo.page"
-				:total-pages="pageInfo.totalPages"
-				@change-page="onPageUpdate"
-			/>
-		</article>
-	</BaseLayout>
+	<article class="flex flex-col gap-8 p-4">
+		<HomeTable :groups="groups"/>
+		<HomePagination 
+			:page="pageInfo.page"
+			:total-pages="pageInfo.totalPages"
+			@change-page="onPageUpdate"
+		/>
+	</article>
 </template>
 
 <style>

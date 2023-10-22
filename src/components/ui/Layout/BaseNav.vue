@@ -42,7 +42,10 @@
             </li>
             <li>
               <div class="mb-6">
-                <button class="focus:outline-none">
+                <button 
+                  class="focus:outline-none"
+                  @click="$router.push({name: 'FavoritePage'})"
+                >
                   <i class="fas fa-star text-army-green"></i>
                 </button>
               </div>

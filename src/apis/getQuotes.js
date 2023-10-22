@@ -20,6 +20,7 @@ export const getQuote = async (id) => {
     const IMAGE_BASE = 'https://images.quotable.dev/profile'
     data.thumbnail = `${IMAGE_BASE}/200/${author.slug}.jpg`
     Object.assign(data, author)
+    data._id = id;
   }
 
   return data;  

@@ -1,5 +1,4 @@
 <script>
-  import BaseLayout from '../ui/Layout/BaseLayout.vue';
   import SearchInput from '../ui/Search/SearchInput.vue';
   import BaseIndicator from "../ui/common/BaseIndicator";
   import BaseCard from "../ui/common/BaseCard";
@@ -9,7 +8,6 @@
       
     },
     components: {
-      BaseLayout,
       SearchInput,
       BaseIndicator,
       BaseCard,
@@ -41,7 +39,7 @@
 </script>
 
 <template>
-  <BaseLayout>
+  <div>
     <section class="p-10 flex justify-center">
       <SearchInput
         @on-search-start="onSearchStart"
@@ -77,5 +75,5 @@
         </div>
       </div>
     </section>
-  </BaseLayout>  
+  </div>
 </template> 

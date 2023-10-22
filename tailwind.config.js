@@ -12,6 +12,7 @@ module.exports = {
         md: ['24px', '24px'],
         lg: ['20px', '28px'],
         xl: ['24px', '32px'],
+        xic: ['35px', '40px'],
       },
       spacing: {
         0: "0",

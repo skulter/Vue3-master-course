@@ -1,0 +1,1 @@
+export const FAVORITE_QUOTE_KEY = "@_VUE_QUOTE";
