@@ -1,5 +1,4 @@
 <script>
-	import BaseLayout from '../ui/Layout/BaseLayout.vue';
 	import HomeTable from "../ui/Home/HomeTable.vue";
 	import HomePagination from "../ui/Home/HomePagination.vue";
 	import { getQuotes } from '@/apis/getQuotes';
@@ -17,7 +16,6 @@
 			}
 		},
     components: { 
-			BaseLayout,
 			HomeTable,
 			HomePagination,
 		},

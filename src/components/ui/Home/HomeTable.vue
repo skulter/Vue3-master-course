@@ -24,16 +24,16 @@
 <template>
   <div class="w-full h-full" data-tag-name="table">
     <div class="flex flex-col">
-      <div class="overflow-x-auto sm:mx-6 lg:mx-8">
-        <div class="inline-block min-w-full py-2 sm:mx-6 lg:mx-8">
+      <div class="overflow-x-auto">
+        <div class="inline-block min-w-full py-2">
           <div class="overflow-hidden">
             <table class="min-w-full text-left text-sm font-light">
               <thead
                 class="border-b bg-white font-medium dark:border-neutral-500 ">
                 <tr>
-                  <th scope="col" class="w-[10%] px-6 py-4">#</th>
-                  <th scope="col" class="w-[70%] px-6 py-4">Quote</th>
-                  <th scope="col" class="w-[20%] px-6 py-4">Speaker</th>
+                  <th scope="col" class="w-[100px] px-6 py-4">#</th>
+                  <th scope="col" class="w-[800px] px-6 py-4">Quote</th>
+                  <th scope="col" class="w-[180px] px-6 py-4">Speaker</th>
                 </tr>
               </thead>
               <tbody>
@@ -48,9 +48,9 @@
                   }"
                   @click="onClickRow(group.id)"
                 >
-                  <td class="whitespace-nowrap w-[10%] px-6 py-4 font-medium">{{ index + 1 }}</td>
-                  <td class="whitespace-nowrap w-[70%] px-6 py-4 app-quote-name">{{ group.quote }}</td>
-                  <td class="whitespace-nowrap w-[20%] px-6 py-4">@{{group.author}}</td>
+                  <td class="whitespace-nowrap min-w-[100px] max-w-[100px] w-[100px] px-6 py-4 font-medium overflow-hidden">{{ index + 1 }}</td>
+                  <td class="whitespace-nowrap min-w-[800px] max-w-[800px] w-[800px] px-6 py-4 app-quote-name overflow-hidden">{{ group.quote }}</td>
+                  <td class="whitespace-nowrap min-w-[180px] max-w-[180px] w-[180px] px-6 py-4 overflow-hidden">@{{group.author}}</td>
                 </tr>
               </tbody>
             </table>
