@@ -63,7 +63,7 @@
           class="flex flex-col gap-5"
         >
           <template v-if="searchLists.length > 0">
-            <base-card
+            <BaseCard
               v-for="item in searchLists"
               :key="item._id"
               :author="item.author"
