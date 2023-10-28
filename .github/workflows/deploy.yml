@@ -15,7 +15,7 @@ jobs:
         run: ./zip_project.sh
 
       - name: Generate environment variables
-        run: echo "@_BUILD_TIME=$(TZ=":Asia/Seoul" date -R|sed 's/.....$//')" >> $GITHUB_ENV
+        run: echo "_BUILD_TIME=$(TZ=":Asia/Seoul" date -R|sed 's/.....$//')" >> $GITHUB_ENV
 
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v21
@@ -24,6 +24,6 @@ jobs:
           aws_secret_key: ${{ secrets.AWS_SCRET_ACCESS_KEY }}
           application_name: vue2-master-course
           environment_name: Vue2-master-course-env
-          version_label: ${{ @_BUILD_TIME }}-${{github.sha}}
+          version_label: ${{ _BUILD_TIME }}-${{github.sha}}
           region: ap-northeast-2
           deployment_package: beanstalk_vue.zip
