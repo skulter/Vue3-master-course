@@ -4,6 +4,11 @@
   export default {
     components: {
       BaseNav,
+    },
+    computed: {
+      pageTitle() {
+        return this.$route.meta.pageTitle
+      }
     }
   }
 </script>
@@ -16,7 +21,7 @@
     <div class="flex">
       <BaseNav />
       <div class="w-full h-full">
-        <div class="w-full p-4 text-center h-9 text-md"> Tab name </div>
+        <div class="w-full p-4 text-center h-9 text-md">{{ pageTitle }}</div>
         <slot></slot>
       </div>
     </div>

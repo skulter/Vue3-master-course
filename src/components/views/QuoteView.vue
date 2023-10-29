@@ -10,6 +10,11 @@
       BaseIndicator,
       QuoteCard,
     },
+    props: {
+      quoteProps: {
+        type: Object
+      }
+    },
     data: function(){
       return {
         quote: {
@@ -21,6 +26,7 @@
         random: {
           meta: {
             isLoading: false,
+            fetchedAlready: false,
           }
         },
         isFavoriteQuote: false,
@@ -83,6 +89,11 @@
       },
     },
     async created() {
+        if(this.quoteProps){
+          this.quote.data = this.quoteProps;
+          return;
+        }
+
         try {
           this.quote.meta.isLoading = true 
           const quote = await getQuote(this.quoteId)
