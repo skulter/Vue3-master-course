@@ -19,14 +19,14 @@
       return {
         quote: {
           meta: {
-            isLoading: false
+            isLoading: false,
+            isFetched: false,
           },
           data: null
         },
         random: {
           meta: {
             isLoading: false,
-            fetchedAlready: false,
           }
         },
         isFavoriteQuote: false,
@@ -88,27 +88,31 @@
         return this.random.meta.isLoading;
       },
     },
-    async created() {
-        if(this.quoteProps){
-          this.quote.data = this.quoteProps;
-          return;
-        }
-
-        try {
-          this.quote.meta.isLoading = true 
-          const quote = await getQuote(this.quoteId)
-          this.quote.data = quote;
-          this.quote.meta.isLoading = false;
-        }
-        catch(e) {
-          if(e.response?.status === 404) {
-            this.$router.replace({name: "homePage"})
-          }
-        }
-        
-        this.isFavoriteQuote = this.checkisFavoriteQuote();
+    beforeRouteUpdate(to, from, next){
+      if(to.params.id !== from.params.id) {
+        this.quote.meta.isFetched = false;
+      }
+      next();
     },
-    
+    async created() {
+      if(this.quote.meta.isFetched){
+        this.quote.data = this.quoteProps;
+        return;
+      }
+
+      try {
+        this.quote.meta.isLoading = true 
+        const quote = await getQuote(this.quoteId)
+        this.quote.data = quote;
+        this.quote.meta.isLoading = false;
+      }
+      catch(e) {
+        if(e.response?.status === 404) {
+          this.$router.replace({name: "homePage"})
+        }
+      }
+      this.isFavoriteQuote = this.checkisFavoriteQuote();
+    },
 }
 </script>
  

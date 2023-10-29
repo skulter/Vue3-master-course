@@ -13,8 +13,7 @@ const routes = [
     component: HomeView,
     name: "HomePage",
     meta: {
-      requireAuth: false,
-      pageTitle: "Quote Table"
+      pageTitle: "Quotes Table",
     }
   },
   { 
@@ -32,11 +31,15 @@ const routes = [
     name: "QuotePage",
     meta: {
       requireAuth: false,
-      pageTitle: "quote View"
+      pageTitle: "quote View",
+      fetchedAlready: false,
+      quote: {},
     },
-    props: route => ({
-      quoteProps: route.meta.quote
-    }),
+    props: route => {
+      return {
+        quoteProps: route.meta.quote
+      }
+    },
     beforeEnter: async (to, from ,next) => {
       if(from.name) {
         NProgress.start();
@@ -91,7 +94,6 @@ router.beforeEach((to, from, next) => {
     next();
   }
 });
-
 router.afterEach(() => {
   NProgress.done();
 })
