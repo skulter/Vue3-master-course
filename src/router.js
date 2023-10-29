@@ -85,7 +85,8 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   if (to.meta.requireAuth) {
     if(from.name !== "HomePage") {
-      next({name: "HomePage"});
+      // https://stackoverflow.com/questions/62223195/vue-router-uncaught-in-promise-error-redirected-from-login-to-via-a?rq=1
+      router.push({name: "HomePage"});
     }
   } else {
     next();
