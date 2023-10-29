@@ -1,3 +1,4 @@
+import NProgress from 'nprogress';
 import VueRouter from "vue-router";
 import HomeView from "./components/views/HomeView.vue"
 import SearchView from "./components/views/SearchView.vue"
@@ -38,6 +39,7 @@ const routes = [
     }),
     beforeEnter: async (to, from ,next) => {
       if(from.name) {
+        NProgress.start();
         const quote = await getQuote(to.params.id)
         to.meta.quote = quote;
         to.meta.pageTitle = quote.author;
@@ -89,5 +91,9 @@ router.beforeEach((to, from, next) => {
     next();
   }
 });
+
+router.afterEach(() => {
+  NProgress.done();
+})
 
 export default router;
