@@ -48,7 +48,7 @@ const routes = [
     component: FavoriteView,
     name: "FavoritePage",
     meta: {
-      requireAuth: true,
+      requireAuth: false,
       pageTitle: "My Favorite"
     }
   },
