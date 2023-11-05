@@ -15,6 +15,9 @@
         return this.$route.meta.pageTitle
       },
       ...mapGetters(['quoteById']),
+      innerHeight() {
+        return window.innerHeight
+      }
     }
   }
 </script>
@@ -22,8 +25,8 @@
 <template>
   <div
     class="bg-gradient-to-b from-transparent via-stone-100 to-green-100"
-		:style="{height: 'window.innerHeight'}"
-	>
+    :style="{ minHeight: `${innerHeight}px` }"
+  >
     <div class="flex">
       <BaseNav />
       <div class="w-full h-full">

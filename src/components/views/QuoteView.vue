@@ -55,11 +55,11 @@
           let set = new Set(saved);
 
           if(this.checkisFavoriteQuote()) {
-            const removed = saved.filter(({_id}) => _id !== quote.data._id);
+            const removed = saved.filter(({_id}) => _id !== quote._id);
             set = new Set(removed);
             this.isFavoriteQuote = false;
           } else {
-            set.add(quote.data);
+            set.add(quote);
             this.isFavoriteQuote = true;
           }
           localStorage.setItem(FAVORITE_QUOTE_KEY, JSON.stringify(Array.from(set.values())));
