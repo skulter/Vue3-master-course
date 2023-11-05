@@ -1,14 +1,20 @@
 <script>
   import BaseNav from './BaseNav.vue';
+  import { createNamespacedHelpers } from "vuex";
   
+  const { mapGetters } = createNamespacedHelpers("quote");
   export default {
     components: {
       BaseNav,
     },
     computed: {
       pageTitle() {
+        if(this.$route.name == "QuotePage") {
+          return this.quoteById(this.$route.params.id)?.author ?? "...loading"
+        }
         return this.$route.meta.pageTitle
-      }
+      },
+      ...mapGetters(['quoteById']),
     }
   }
 </script>

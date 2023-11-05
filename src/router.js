@@ -5,7 +5,8 @@ import SearchView from "./components/views/SearchView.vue"
 import QuoteView from "./components/views/QuoteView.vue"
 import FavoriteView from "./components/views/FavoriteView.vue";
 import NoFoundView from "./components/views/NoFoundView.vue";
-import { getQuote } from "./apis";
+
+import { store } from "./stores";
 
 const routes = [
   { 
@@ -34,15 +35,10 @@ const routes = [
       requireAuth: false,
       pageTitle: "quote View"
     },
-    props: route => ({
-      quoteProps: route.meta.quote
-    }),
     beforeEnter: async (to, from ,next) => {
-      if(from.name) {
+      if(from.name &&  !store.getters['quote/quoteById'](to.params.id)) {
         NProgress.start();
-        const quote = await getQuote(to.params.id)
-        to.meta.quote = quote;
-        to.meta.pageTitle = quote.author;
+        await store.dispatch("quote/loadQuoteData",to.params.id);
       }
       next();
     }

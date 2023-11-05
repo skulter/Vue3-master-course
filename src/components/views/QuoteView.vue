@@ -1,10 +1,11 @@
 <script>
-  import { getQuote } from "../../apis/getQuotes"
   import BaseIndicator from "../ui/common/BaseIndicator.vue";
   import QuoteCard from "../ui/Quote/QuoteCard.vue";
   import { FAVORITE_QUOTE_KEY } from "../../constants/token";
   import { getSingleRandomQuote } from "../../apis/getRandom";
-
+  import { createNamespacedHelpers } from "vuex";
+  
+  const { mapActions, mapGetters, mapState } = createNamespacedHelpers("quote");
   export default {
     components: { 
       BaseIndicator,
@@ -17,13 +18,6 @@
     },
     data: function(){
       return {
-        quote: {
-          meta: {
-            isLoading: false,
-            isFetched: false,
-          },
-          data: null
-        },
         random: {
           meta: {
             isLoading: false,
@@ -73,33 +67,36 @@
         catch (e){
           //
         }
-      }
+      },
+      ...mapActions(['loadQuoteData'])
     },
-    computed: { 
+    computed: {
       quoteId() {
         return this.$route.params.id;
       },
       randomId(){
         return ~~(Math.random()* 100)
       },
-      isLoading(){ 
-        return this.quote.meta.isLoading;
-      },
       isRandomLoading() {
         return this.random.meta.isLoading;
       },
+      ...mapGetters(['quoteById']),
+      ...mapState({
+        isLoading: state => {
+          return state.isLoading;
+        }
+      }),
+      quote() {
+        return this.quoteById(this.quoteId);
+      }
     },
     async created() {
-        if(this.quoteProps){
-          this.quote.data = this.quoteProps;
+        if(this.quote){
           return;
         }
 
         try {
-          this.quote.meta.isLoading = true 
-          const quote = await getQuote(this.quoteId)
-          this.quote.data = quote;
-          this.quote.meta.isLoading = false;
+          await this.loadQuoteData(this.quoteId)
         }
         catch(e) {
           if(e.response?.status === 404) {
@@ -122,7 +119,10 @@
         v-else
         class-="border border-blue-300 shadow rounded-md p-4 max-w-sm w-full mx-auto"
       >
-        <QuoteCard :quote="quote"/>
+        <QuoteCard 
+          v-if="quote" 
+          :quote="quote"
+        />
         <section>
           <div class="flex justify-end">
             <button 
