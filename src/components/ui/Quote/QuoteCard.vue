@@ -28,7 +28,7 @@
         >
           <img 
             class="rounded-3xl w-15 absolute" 
-            :src="quote.data.thumbnail" 
+            :src="quote.thumbnail" 
             @load="onloadImg"
           />
           <div class="animate-pulse flex space-x-4"
@@ -38,13 +38,13 @@
           </div>
         </figure>
         <article class="max-w-[35rem] max-h-15 overflow-y-auto">
-          <h1 class="my-2 text-gray-400 font-bold text-2xl">{{ quote.data.author }}</h1>
-          <h3 class="my-3">{{ quote.data.bio }}</h3>
+          <h1 class="my-2 text-gray-400 font-bold text-2xl">{{ quote.author }}</h1>
+          <h3 class="my-3">{{ quote.bio }}</h3>
         </article>
       </section>
       <section>
         <div class="p-10">
-            <h2 class="my-2 duration-900 text-gray-700 text-3xl ">{{ quote.data.content }}</h2>
+            <h2 class="my-2 duration-900 text-gray-700 text-3xl ">{{ quote.content }}</h2>
         </div>
       </section>
     </div>

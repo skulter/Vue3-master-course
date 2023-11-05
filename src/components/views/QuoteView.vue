@@ -1,26 +1,27 @@
 <script>
-  import { getQuote } from "../../apis/getQuotes"
   import BaseIndicator from "../ui/common/BaseIndicator.vue";
   import QuoteCard from "../ui/Quote/QuoteCard.vue";
   import { FAVORITE_QUOTE_KEY } from "../../constants/token";
   import { getSingleRandomQuote } from "../../apis/getRandom";
-
+  import { createNamespacedHelpers } from "vuex";
+  
+  const { mapActions, mapGetters, mapState } = createNamespacedHelpers("quote");
   export default {
     components: { 
       BaseIndicator,
       QuoteCard,
     },
+    props: {
+      quoteProps: {
+        type: Object
+      }
+    },
     data: function(){
       return {
-        quote: {
-          meta: {
-            isLoading: false
-          },
-          data: null
-        },
         random: {
           meta: {
             isLoading: false,
+            fetchedAlready: false,
           }
         },
         isFavoriteQuote: false,
@@ -54,11 +55,11 @@
           let set = new Set(saved);
 
           if(this.checkisFavoriteQuote()) {
-            const removed = saved.filter(({_id}) => _id !== quote.data._id);
+            const removed = saved.filter(({_id}) => _id !== quote._id);
             set = new Set(removed);
             this.isFavoriteQuote = false;
           } else {
-            set.add(quote.data);
+            set.add(quote);
             this.isFavoriteQuote = true;
           }
           localStorage.setItem(FAVORITE_QUOTE_KEY, JSON.stringify(Array.from(set.values())));
@@ -66,28 +67,36 @@
         catch (e){
           //
         }
-      }
+      },
+      ...mapActions(['loadQuoteData'])
     },
-    computed: { 
+    computed: {
       quoteId() {
         return this.$route.params.id;
       },
       randomId(){
         return ~~(Math.random()* 100)
       },
-      isLoading(){ 
-        return this.quote.meta.isLoading;
-      },
       isRandomLoading() {
         return this.random.meta.isLoading;
       },
+      ...mapGetters(['quoteById']),
+      ...mapState({
+        isLoading: state => {
+          return state.isLoading;
+        }
+      }),
+      quote() {
+        return this.quoteById(this.quoteId);
+      }
     },
     async created() {
+        if(this.quote){
+          return;
+        }
+
         try {
-          this.quote.meta.isLoading = true 
-          const quote = await getQuote(this.quoteId)
-          this.quote.data = quote;
-          this.quote.meta.isLoading = false;
+          await this.loadQuoteData(this.quoteId)
         }
         catch(e) {
           if(e.response?.status === 404) {
@@ -97,7 +106,6 @@
         
         this.isFavoriteQuote = this.checkisFavoriteQuote();
     },
-    
 }
 </script>
  
@@ -111,7 +119,10 @@
         v-else
         class-="border border-blue-300 shadow rounded-md p-4 max-w-sm w-full mx-auto"
       >
-        <QuoteCard :quote="quote"/>
+        <QuoteCard 
+          v-if="quote" 
+          :quote="quote"
+        />
         <section>
           <div class="flex justify-end">
             <button 

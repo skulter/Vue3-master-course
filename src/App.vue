@@ -13,7 +13,12 @@
 <template>
   <div id="app">
     <BaseLayout>
-      <router-view :key="$route.fullPath"></router-view>
+      <KeepAlive>
+        <router-view 
+          :key="$route.fullPath"
+        >
+        </router-view>
+      </KeepAlive>
     </BaseLayout>
   </div>
 </template>

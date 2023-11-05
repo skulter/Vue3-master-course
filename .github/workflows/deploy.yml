@@ -23,7 +23,7 @@ jobs:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SCRET_ACCESS_KEY }}
           application_name: vue2-master-course
-          environment_name: Vue2-master-course-docker
+          environment_name: Vue2-master-course-env
           version_label: ${{ env._BUILD_TIME }}-${{github.sha}}
           region: ap-northeast-2
           deployment_package: beanstalk_vue.zip

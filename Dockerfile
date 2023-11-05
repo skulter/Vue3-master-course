@@ -6,8 +6,11 @@ COPY package*.json ./
 
 RUN npm install
 
+#// node_modules   /irteam/app
 COPY . ./
 RUN npm run build
+
+# /dist
 
 FROM nginx:stable-alpine as production
 COPY --from=build /irteam/app/dist /usr/share/nginx/web

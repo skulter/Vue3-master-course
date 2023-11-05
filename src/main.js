@@ -2,11 +2,13 @@ import Vue from 'vue'
 import VueRouter from "vue-router";
 import App from './App.vue'
 import router from './router';
-
+import { store } from "./stores"
 import "./index.css";
+import '../node_modules/nprogress/nprogress.css' 
+
 
 Vue.config.productionTip = false
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 Vue.prototype.log = console.log
 
 const routerPush = VueRouter.prototype.push;
@@ -32,8 +34,10 @@ VueRouter.prototype.replace = function(params) {
 }
 
 new Vue({
+  store,
   router,
   render: h => h(App),
 })
   .$mount('#app')
+  
 

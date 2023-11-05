@@ -1,3 +1,4 @@
+import NProgress from 'nprogress';
 import VueRouter from "vue-router";
 import HomeView from "./components/views/HomeView.vue"
 import SearchView from "./components/views/SearchView.vue"
@@ -5,31 +6,60 @@ import QuoteView from "./components/views/QuoteView.vue"
 import FavoriteView from "./components/views/FavoriteView.vue";
 import NoFoundView from "./components/views/NoFoundView.vue";
 
+import { store } from "./stores";
+
 const routes = [
   { 
     path: "/", 
     component: HomeView,
-    name: "HomePage"
+    name: "HomePage",
+    meta: {
+      requireAuth: false,
+      pageTitle: "Quote Table"
+    }
   },
   { 
     path: "/search", 
     component: SearchView,
-    name: "SearchPage"
+    name: "SearchPage",
+    meta: {
+      requireAuth: false,
+      pageTitle: "Search Quotes"
+    }
   },
   { 
     path: "/quote/:id", 
     component: QuoteView,
     name: "QuotePage",
+    meta: {
+      requireAuth: false,
+      pageTitle: "quote View"
+    },
+    beforeEnter: async (to, from ,next) => {
+      if(from.name &&  !store.getters['quote/quoteById'](to.params.id)) {
+        NProgress.start();
+        await store.dispatch("quote/loadQuoteData",to.params.id);
+      }
+      next();
+    }
   },
   {
     path: "/favorite",
     component: FavoriteView,
     name: "FavoritePage",
+    meta: {
+      requireAuth: false,
+      pageTitle: "My Favorite"
+    }
   },
   { 
     path: "*", 
     component: NoFoundView,
-    name: "notFoundPage"
+    name: "notFoundPage",
+    meta: {
+      requireAuth: false,
+      pageTitle: "Need some help?"
+    }
   },
 ]
 /**
@@ -46,6 +76,20 @@ const routes = [
 const router = new VueRouter({
   routes,
   mode: 'history'
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.requireAuth) {
+    if(from.name !== "HomePage") {
+      // https://stackoverflow.com/questions/62223195/vue-router-uncaught-in-promise-error-redirected-from-login-to-via-a?rq=1
+      router.push({name: "HomePage"});
+    }
+  } else {
+    next();
+  }
+});
+router.afterEach(() => {
+  NProgress.done();
 })
 
 export default router;
