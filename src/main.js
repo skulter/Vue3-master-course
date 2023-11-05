@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import { createApp } from 'vue'
 import VueRouter from "vue-router";
 import App from './App.vue'
 import router from './router';
@@ -6,10 +6,16 @@ import { store } from "./stores"
 import "./index.css";
 import '../node_modules/nprogress/nprogress.css' 
 
+const logPlugin = {
+  install(app) {
+    app.config.globalProperties.$log = console.log
+  }
+}
 
-Vue.config.productionTip = false
-Vue.use(VueRouter);
-Vue.prototype.log = console.log
+const app = createApp(App)
+  .use(Vuex)
+  .use(VueRouter)
+  .use(logPlugin);
 
 const routerPush = VueRouter.prototype.push;
 const routerReplace = VueRouter.prototype.replace;
@@ -33,11 +39,6 @@ VueRouter.prototype.replace = function(params) {
   routerReplace.call(this,params)
 }
 
-new Vue({
-  store,
-  router,
-  render: h => h(App),
-})
-  .$mount('#app')
+app.mount('#app')
   
 

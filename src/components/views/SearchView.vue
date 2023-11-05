@@ -1,7 +1,7 @@
 <script>
   import SearchInput from '../ui/Search/SearchInput.vue';
-  import BaseIndicator from "../ui/common/BaseIndicator";
-  import BaseCard from "../ui/common/BaseCard";
+  import BaseIndicator from "@/components/ui/common/BaseIndicator.vue";
+  import BaseCard from "@/components/ui/common/BaseCard.vue";
 
   export default {
     props: {
@@ -57,7 +57,7 @@
           v-if="isSearching"
         />
         <div 
-          v-else
+          data-v-else
           class="flex flex-col gap-5"
         >
           <template v-if="searchLists.length > 0">
