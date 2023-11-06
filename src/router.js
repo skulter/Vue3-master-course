@@ -1,5 +1,5 @@
 import NProgress from 'nprogress';
-import VueRouter from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "./components/views/HomeView.vue"
 import SearchView from "./components/views/SearchView.vue"
 import QuoteView from "./components/views/QuoteView.vue"
@@ -53,7 +53,7 @@ const routes = [
     }
   },
   { 
-    path: "*", 
+    path: '/:catchAll(.*)',
     component: NoFoundView,
     name: "notFoundPage",
     meta: {
@@ -73,9 +73,9 @@ const routes = [
  * ## this.$route.hash
  * 
  */
-const router = new VueRouter({
+const router = createRouter({
+  history: createWebHistory(),
   routes,
-  mode: 'history'
 })
 
 router.beforeEach((to, from, next) => {

@@ -13,12 +13,14 @@
 <template>
   <div id="app">
     <BaseLayout>
-      <KeepAlive>
         <router-view 
           :key="$route.fullPath"
+          v-slot="{Component}"
         >
+          <KeepAlive>
+            <component :is="Component"></component>
+          </KeepAlive>
         </router-view>
-      </KeepAlive>
     </BaseLayout>
   </div>
 </template>
