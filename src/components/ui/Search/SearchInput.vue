@@ -1,7 +1,8 @@
-<script>
-  import { getSearchQuotes } from "../../../apis/getSearchQuotes"
+<script setup>
+import { getSearchQuotes } from "../../../apis/getSearchQuotes"
+import { ref, defineEmits } from "vue";
 
-  function debounce(fn , delay) {
+function debounce(fn , delay) {
     let timeout = null;
     
     return function() {
@@ -12,29 +13,23 @@
     }
   }
 
-  export default {
-    name: "SearchInput",
-    data: function() {
-      return {
-        input: "",
-        quotes: null,
+  const input = ref("");
+  const quotes = ref(null);
+
+  const emit = defineEmits(["on-search-start", "on-search-end"]);
+
+  const onSearchInput = debounce(async function() {
+    if(input.value) {
+      emit("on-search-start");
+      try {
+         const data = await getSearchQuotes(input.value);
+         emit("on-search-end",data.results);
+      } catch(e) {
+        console.error(e);
+        emit("on-search-end");
       }
-    },
-    methods: {
-      onSearchInput: debounce(async function(){
-        if(this.input) {
-          this.$emit('on-search-start');
-          try {
-            const data = await getSearchQuotes(this.input)
-            this.$emit('on-search-end', data.results);
-          } catch (e){
-            console.error(e);
-            this.$emit('on-search-end', []);
-          }
-        }
-      },300)
     }
-  }
+  },300);
 </script>
 
 <template>

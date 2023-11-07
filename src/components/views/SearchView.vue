@@ -2,40 +2,45 @@
   import SearchInput from '../ui/Search/SearchInput.vue';
   import BaseIndicator from "@/components/ui/common/BaseIndicator.vue";
   import BaseCard from "@/components/ui/common/BaseCard.vue";
+import { computed, defineComponent, ref } from 'vue';
 
-  export default {
-    props: {
-      
-    },
+  export default defineComponent({
+    name: "SearchView",
     components: {
       SearchInput,
       BaseIndicator,
       BaseCard,
     },
-    data: function() {
-      return {
-        isSearching: false,
-        searchLists: [],
-      }
-    },
-    computed: {
-      boxHeight: function() {
-        if(this.isSearching) {
+    setup() {
+      const isSearching = ref();
+      const searchLists = ref([]);
+      
+      const boxHeight = computed(() => {
+        if(isSearching.value) {
           return "108px"
         }
-        return  "500px"
+        return "500px"
+      })
+
+      const onSearchStart = () => {
+        isSearching.value = true;
+      }
+      
+      const onSearchEnd = (lists) => {
+        searchLists.value = lists;
+        isSearching.value = false;
+      }
+
+      return {
+        isSearching,
+        searchLists,
+        boxHeight,
+        onSearchStart,
+        onSearchEnd
       }
     },
-    methods: {
-      onSearchStart: function() {
-        this.isSearching = true;
-      },
-      onSearchEnd: function(lists) {
-        this.searchLists = lists;
-        this.isSearching = false;
-      }
-    },
-  }
+
+  })
 </script>
 
 <template>
