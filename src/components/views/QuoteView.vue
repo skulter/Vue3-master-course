@@ -7,29 +7,21 @@
   import { onMounted, ref, computed } from "vue";
   import { useRouter, useRoute } from "vue-router";
   
-  const { mapActions, mapGetters, mapState } = createNamespacedHelpers("quote");
+  const {  mapGetters, mapState } = createNamespacedHelpers("quote");
   const random = ref({meta: {
     isLoading: false,
     fetchedAlready: false
   }});
-  const isFavoriteQuote = ref(false);
   const router = useRouter();
   const route = useRoute();  
   const store = useStore();
-
-  const onClickRandom = async () => {
-    random.value.meta.isLoading = false;
-    const data = await getSingleRandomQuote();
-    random.value.meta.isLoading = false;
-    router.push(data._id);
-  }
 
   const checkisFavoriteQuote = () => {
     try {
       const savedQuotes = JSON.parse(localStorage.getItem(FAVORITE_QUOTE_KEY));
       
       if(savedQuotes.some(({_id}) => {
-          return _id == this.quoteId
+          return _id == quoteId
       })) {
         return true;
       }
@@ -39,6 +31,16 @@
       return false;
     }
   }
+
+  const isFavoriteQuote = ref(checkisFavoriteQuote());
+  const onClickRandom = async () => {
+    random.value.meta.isLoading = false;
+    const data = await getSingleRandomQuote();
+    random.value.meta.isLoading = false;
+    router.push(data._id);
+  }
+
+  
 
   const toggleFavoriteQuotes = (quote) => {
     try {
