@@ -1,7 +1,7 @@
-<script>
-  export default {
-    name: "BaseIndicator",
-  }
+<script setup>
+// export default {
+//   name: "SuperIndicator"
+// }
 </script>
 
 <template>

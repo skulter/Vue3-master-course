@@ -1,22 +1,14 @@
-<script>
-  export default {
-    name: "QuoteCard",
-    props: [
-      'showImage',
-      'quote',
-    ],
-    data: function() {
-      return {
-        imageLoaded: false
-      }
-    },
-    methods: {
-      onloadImg: function() {
-        this.imageLoaded = true;
-      },
-    },
-    
-  }
+<script setup>
+import { ref } from 'vue';
+
+const props = defineProps({
+  showImage: Boolean,
+  quote: Object
+});
+const imageLoaded = ref(false);
+const onloadImg = () => {
+  imageLoaded.value = true;
+}
 </script>
 
 <template>
