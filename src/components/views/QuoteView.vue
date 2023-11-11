@@ -1,117 +1,102 @@
-<script>
+<script setup>
   import BaseIndicator from "../ui/common/BaseIndicator.vue";
   import QuoteCard from "../ui/Quote/QuoteCard.vue";
   import { FAVORITE_QUOTE_KEY } from "../../constants/token";
   import { getSingleRandomQuote } from "../../apis/getRandom";
-  import { createNamespacedHelpers } from "vuex";
+  import { createNamespacedHelpers, useStore } from "vuex";
+  import { onMounted, ref, computed } from "vue";
+  import { useRouter, useRoute } from "vue-router";
   
-  const { mapActions, mapGetters, mapState } = createNamespacedHelpers("quote");
-  export default {
-    components: { 
-      BaseIndicator,
-      QuoteCard,
-    },
-    props: {
-      quoteProps: {
-        type: Object
-      }
-    },
-    data: function(){
-      return {
-        random: {
-          meta: {
-            isLoading: false,
-            fetchedAlready: false,
-          }
-        },
-        isFavoriteQuote: false,
-      }
-    },
-    methods: {
-      onClickRandom: async function() {
-        this.random.meta.isLoading = true;
-        const data = await getSingleRandomQuote();
-        this.random.meta.isLoading = false;
-        this.$router.push(data._id);
-      },
-      checkisFavoriteQuote() {
-        try {
-          const savedQuotes = JSON.parse(localStorage.getItem(FAVORITE_QUOTE_KEY));
-          
-          if(savedQuotes.some(({_id}) => {
-              return _id == this.quoteId
-          })) {
-            return true;
-          }
-          return false;
-        }
-        catch {
-          return false;
-        }
-      },
-      toggleFavoriteQuotes(quote) {
-        try {
-          const saved = JSON.parse(localStorage.getItem(FAVORITE_QUOTE_KEY));
-          let set = new Set(saved);
+  const {  mapGetters, mapState } = createNamespacedHelpers("quote");
+  const random = ref({meta: {
+    isLoading: false,
+    fetchedAlready: false
+  }});
+  const router = useRouter();
+  const route = useRoute();  
+  const store = useStore();
 
-          if(this.checkisFavoriteQuote()) {
-            const removed = saved.filter(({_id}) => _id !== quote._id);
-            set = new Set(removed);
-            this.isFavoriteQuote = false;
-          } else {
-            set.add(quote);
-            this.isFavoriteQuote = true;
-          }
-          localStorage.setItem(FAVORITE_QUOTE_KEY, JSON.stringify(Array.from(set.values())));
-        }
-        catch (e){
-          //
-        }
-      },
-      ...mapActions(['loadQuoteData'])
-    },
-    computed: {
-      quoteId() {
-        return this.$route.params.id;
-      },
-      randomId(){
-        return ~~(Math.random()* 100)
-      },
-      isRandomLoading() {
-        return this.random.meta.isLoading;
-      },
-      ...mapGetters(['quoteById']),
-      ...mapState({
-        isLoading: state => {
-          return state.isLoading;
-        }
-      }),
-      quote() {
-        return this.quoteById(this.quoteId);
+  const checkisFavoriteQuote = () => {
+    try {
+      const savedQuotes = JSON.parse(localStorage.getItem(FAVORITE_QUOTE_KEY));
+      
+      if(savedQuotes.some(({_id}) => {
+          return _id == quoteId
+      })) {
+        return true;
       }
-    },
-    async created() {
-        if(this.quote){
-          return;
-        }
+      return false;
+    }
+    catch {
+      return false;
+    }
+  }
 
-        try {
-          await this.loadQuoteData(this.quoteId)
-        }
-        catch(e) {
-          if(e.response?.status === 404) {
-            this.$router.replace({name: "homePage"})
-          }
-        }
-        
-        this.isFavoriteQuote = this.checkisFavoriteQuote();
-    },
-}
+  const isFavoriteQuote = ref(checkisFavoriteQuote());
+  const onClickRandom = async () => {
+    random.value.meta.isLoading = false;
+    const data = await getSingleRandomQuote();
+    random.value.meta.isLoading = false;
+    router.push(data._id);
+  }
+
+  
+
+  const toggleFavoriteQuotes = (quote) => {
+    try {
+      const saved = JSON.parse(localStorage.getItem(FAVORITE_QUOTE_KEY));
+      let set = new Set(saved);
+
+      if(checkisFavoriteQuote()) {
+        const removed = saved.filter(({_id}) => _id !== quote._id);
+        set = new Set(removed);
+        isFavoriteQuote.value = false;
+      } else {
+        set.add(quote);
+        isFavoriteQuote.value = true;
+      }
+      localStorage.setItem(FAVORITE_QUOTE_KEY, JSON.stringify(Array.from(set.values())));
+    }
+    catch (e){
+      //
+    }
+  }
+
+  const loadQuoteData = (id) => store.dispatch("quote/loadQuoteData",id);
+  const getterMapper = mapGetters(["quoteById"]);
+  const getters = Object.keys(getterMapper).reduce((acc,curr) => {
+    acc[curr] = computed(getterMapper[curr].bind({$store: store}))
+    return acc;
+  },{})
+  const {quoteById} = getters;
+  const stateMapper = mapState(["isLoading"]);
+  const { isLoading } = Object.keys(stateMapper).reduce((acc,curr) => {
+    acc[curr] = computed(stateMapper[curr].bind({$store: store}))
+    return acc;
+  },{})
+  const quoteId = route.params.id;
+  const isRandomLoading = computed(() => random.value.meta.isLoading)
+  const quote = computed(() => quoteById.value(quoteId));
+
+  onMounted(async () => {
+    if(quote.value) {
+      return;
+    }
+    try {
+      await loadQuoteData(quoteId);
+    }  catch(e) {
+      if(e.response?.status === 404) {
+        router.replace({name: "homePage"})
+      }
+    }
+    isFavoriteQuote.value = checkisFavoriteQuote();  
+  })
 </script>
  
 <template>
   <div class="px-40 py-24 items-center flex justify-center flex-col-reverse lg:flex-row gap-16">
     <div class="flex w-full relative pb-12 justify-center items-center">
+
       <BaseIndicator
         v-if="isLoading"
       />

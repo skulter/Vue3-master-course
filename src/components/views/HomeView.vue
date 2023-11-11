@@ -2,53 +2,58 @@
 	import HomeTable from "../ui/Home/HomeTable.vue";
 	import HomePagination from "../ui/Home/HomePagination.vue";
 	import { getQuotes } from '@/apis/getQuotes';
-
-	export default {
-		data() {
-			const pageInfo = {
-				page: 0,
-				totalPages: 0,
-			};
-			const quotes = [];
-			return {
-				pageInfo,
-				quotes
-			}
-		},
-    components: { 
+	import { computed, defineComponent, onMounted, ref } from "vue";
+	
+	export default defineComponent({
+		components: { 
 			HomeTable,
 			HomePagination,
 		},
-		methods: {
-			onPageUpdate(flag) {
-				if(flag === 'next') {
-					this.pageInfo.page += 1;
+		setup () {
+			const pageInfo = ref({
+				page: 0,
+				totalPages: 0,
+			});
+			const quotes = ref([]);
+
+			const updateQuotes = async (page) => {
+				const data = await getQuotes(page);
+				pageInfo.value.page = data.page;
+				pageInfo.totalPages = data.totalPages;
+				quotes.value = data.results;
+			}
+
+			const onPageUpdate = (flag) => {
+				if(flag === "next") {
+					pageInfo.value.page += 1;
+				} else {
+					pageInfo.value.page -= 1;
 				}
-				else {
-					this.pageInfo.page -= 1;
-				}
-				this.updateQuotes(this.pageInfo.page)
-			},
-			async updateQuotes(page) {
-				const data = await getQuotes(page)
-				this.pageInfo.page = data.page;
-				this.pageInfo.totalPages = data.totalPages
-				this.quotes = data.results;
+				updateQuotes(pageInfo.value.page);
+			}
+
+			onMounted(() => {
+				updateQuotes(1);
+			});
+
+			const groups = computed(() => quotes.value.map(quote => ({
+				id: quote._id,
+				author: quote.author,
+				quote: quote.content
+			})));
+			
+			return {
+				// data
+				pageInfo,
+				quotes,
+				// computed
+				groups,
+				// methods
+				updateQuotes, 
+				onPageUpdate,
 			}
 		},
-		computed: {
-			groups() {
-				return this.quotes.map(quote => ({
-					id: quote._id,
-					author: quote.author,
-					quote: quote.content,
-				}))
-			}
-		},
-		created() {
-			this.updateQuotes(1)
-		}
-	}
+	});
 </script>
 
 <template>

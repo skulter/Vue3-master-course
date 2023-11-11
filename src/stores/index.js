@@ -1,11 +1,8 @@
-import Vue from 'vue'
-import Vuex from 'vuex';
-
+import { createStore } from 'vuex';
 import  { quoteModule } from "./quoteModule";
 import { authModule } from "./authModule";
 
-Vue.use(Vuex);
-export const store = new Vuex.Store({
+export const store = createStore({
   modules: {
     auth: authModule,
     quote: quoteModule

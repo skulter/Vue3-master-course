@@ -1,43 +1,44 @@
-import Vue from 'vue'
-import VueRouter from "vue-router";
+import { createApp } from 'vue'
+// import VueRouter from "vue-router";
 import App from './App.vue'
 import router from './router';
-import { store } from "./stores"
 import "./index.css";
 import '../node_modules/nprogress/nprogress.css' 
+import { store } from './stores';
 
-
-Vue.config.productionTip = false
-Vue.use(VueRouter);
-Vue.prototype.log = console.log
-
-const routerPush = VueRouter.prototype.push;
-const routerReplace = VueRouter.prototype.replace;
-
-VueRouter.prototype.push = function(params){
-  const from = router.currentRoute.fullPath
-  const to = router.resolve(params).route.fullPath;
-  if(from === to) {
-    return;
+const logPlugin = {
+  install(app) {
+    app.config.globalProperties.$log = console.log
   }
-  routerPush.call(this,params);
 }
 
+export const app = createApp(App)
+  .use(store)
+  .use(router)
+  .use(logPlugin);
 
-VueRouter.prototype.replace = function(params) {
-  const from = router.currentRoute.fullPath
-  const to = router.resolve(params).route.fullPath;
-  if(from === to) {
-    return 
-  }
-  routerReplace.call(this,params)
-}
+// const routerPush = VueRouter.prototype.push;
+// const routerReplace = VueRouter.prototype.replace;
 
-new Vue({
-  store,
-  router,
-  render: h => h(App),
-})
-  .$mount('#app')
+// VueRouter.prototype.push = function(params){
+//   const from = router.currentRoute.fullPath
+//   const to = router.resolve(params).route.fullPath;
+//   if(from === to) {
+//     return;
+//   }
+//   routerPush.call(this,params);
+// }
+
+
+// VueRouter.prototype.replace = function(params) {
+//   const from = router.currentRoute.fullPath
+//   const to = router.resolve(params).route.fullPath;
+//   if(from === to) {
+//     return 
+//   }
+//   routerReplace.call(this,params)
+// }
+
+app.mount('#app')
   
 

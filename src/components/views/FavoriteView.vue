@@ -1,29 +1,22 @@
-<script>
+<script setup>
+  import { ref } from "vue";
   import { FAVORITE_QUOTE_KEY } from "../../constants/token";
-  export default {
-    name: "FavoriteView",
-    data() {
-      return {
-        quotes: [],
+  
+  const quotes = ref([]);
+  
+  const getFavoriteQuotes = () => {
+    try {
+      const saved = JSON.parse(localStorage.getItem(FAVORITE_QUOTE_KEY));
+      if(saved) {
+        quotes.value = saved;
       }
-    },
-    methods: {
-      getFavoriteQuotes() {
-        try {
-          const saved = JSON.parse(localStorage.getItem(FAVORITE_QUOTE_KEY));
-          if(saved) {
-            this.quotes = saved;
-          }
-        }
-        catch {
-          this.quotes = [];
-        }
-      }
-    },
-    created() {
-      this.getFavoriteQuotes();
+    }
+    catch {
+      quotes.value = [];
     }
   }
+
+  getFavoriteQuotes();
 </script>
 
 <template>
