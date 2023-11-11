@@ -5,6 +5,7 @@ import SearchView from "./components/views/SearchView.vue"
 import QuoteView from "./components/views/QuoteView.vue"
 import FavoriteView from "./components/views/FavoriteView.vue";
 import NoFoundView from "./components/views/NoFoundView.vue";
+import TestView from "./components/views/TestView.vue";
 
 import { store } from "./stores";
 
@@ -61,6 +62,11 @@ const routes = [
       pageTitle: "Need some help?"
     }
   },
+  {
+    path: "/test",
+    component: TestView,
+    name: "TestPage"
+  }
 ]
 /**
  * dynamic routes
