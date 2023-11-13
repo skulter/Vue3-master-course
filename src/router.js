@@ -6,8 +6,7 @@ import QuoteView from "./components/views/QuoteView.vue"
 import FavoriteView from "./components/views/FavoriteView.vue";
 import NoFoundView from "./components/views/NoFoundView.vue";
 import TestView from "./components/views/TestView.vue";
-
-import { store } from "./stores";
+import { useQuoteStore } from './stores/quote';
 
 const routes = [
   { 
@@ -37,9 +36,11 @@ const routes = [
       pageTitle: "quote View"
     },
     beforeEnter: async (to, from ,next) => {
-      if(from.name &&  !store.getters['quote/quoteById'](to.params.id)) {
+      const quoteStore = useQuoteStore();
+      debugger;
+      if(from.name && !quoteStore.quoteById(to.params.id)) {
         NProgress.start();
-        await store.dispatch("quote/loadQuoteData",to.params.id);
+        await quoteStore.loadQuoteData(to.params.id);
       }
       next();
     }

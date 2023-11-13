@@ -4,7 +4,7 @@ import App from './App.vue'
 import router from './router';
 import "./index.css";
 import '../node_modules/nprogress/nprogress.css' 
-import { store } from './stores';
+import { setupPinia } from './stores';
 
 const logPlugin = {
   install(app) {
@@ -12,8 +12,10 @@ const logPlugin = {
   }
 }
 
+const pinia =  setupPinia();
+
 export const app = createApp(App)
-  .use(store)
+  .use(pinia)
   .use(router)
   .use(logPlugin);
 

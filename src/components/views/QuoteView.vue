@@ -3,19 +3,16 @@
   import QuoteCard from "../ui/Quote/QuoteCard.vue";
   import { FAVORITE_QUOTE_KEY } from "../../constants/token";
   import { getSingleRandomQuote } from "../../apis/getRandom";
-  import { createNamespacedHelpers, useStore } from "vuex";
   import { onMounted, ref, computed } from "vue";
   import { useRouter, useRoute } from "vue-router";
-  
-  const {  mapGetters, mapState } = createNamespacedHelpers("quote");
+  import { useQuoteStore } from "@/stores/quote";
+
   const random = ref({meta: {
     isLoading: false,
     fetchedAlready: false
   }});
   const router = useRouter();
   const route = useRoute();  
-  const store = useStore();
-
   const checkisFavoriteQuote = () => {
     try {
       const savedQuotes = JSON.parse(localStorage.getItem(FAVORITE_QUOTE_KEY));
@@ -34,13 +31,15 @@
 
   const isFavoriteQuote = ref(checkisFavoriteQuote());
   const onClickRandom = async () => {
-    random.value.meta.isLoading = false;
+    random.value.meta.isLoading = true;
     const data = await getSingleRandomQuote();
     random.value.meta.isLoading = false;
     router.push(data._id);
   }
+  const quoteStore = useQuoteStore();
 
-  
+  const { quoteById, loadQuoteData } = quoteStore;
+
 
   const toggleFavoriteQuotes = (quote) => {
     try {
@@ -62,21 +61,9 @@
     }
   }
 
-  const loadQuoteData = (id) => store.dispatch("quote/loadQuoteData",id);
-  const getterMapper = mapGetters(["quoteById"]);
-  const getters = Object.keys(getterMapper).reduce((acc,curr) => {
-    acc[curr] = computed(getterMapper[curr].bind({$store: store}))
-    return acc;
-  },{})
-  const {quoteById} = getters;
-  const stateMapper = mapState(["isLoading"]);
-  const { isLoading } = Object.keys(stateMapper).reduce((acc,curr) => {
-    acc[curr] = computed(stateMapper[curr].bind({$store: store}))
-    return acc;
-  },{})
   const quoteId = route.params.id;
   const isRandomLoading = computed(() => random.value.meta.isLoading)
-  const quote = computed(() => quoteById.value(quoteId));
+  const quote = computed(() => quoteById(quoteId));
 
   onMounted(async () => {
     if(quote.value) {
@@ -98,7 +85,7 @@
     <div class="flex w-full relative pb-12 justify-center items-center">
 
       <BaseIndicator
-        v-if="isLoading"
+        v-if="quoteStore.isLoading"
       />
       <div 
         v-else

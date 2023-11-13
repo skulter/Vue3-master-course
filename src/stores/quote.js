@@ -1,4 +1,34 @@
 import { getQuote } from "@/apis";
+import { defineStore } from "pinia";
+
+export const useQuoteStore = defineStore('quote',{
+  state: () => ({
+    isLoading: false,
+    map: new Map(),
+    error: null
+  }),
+  getters: {
+    quoteById: (state) => (id) => {
+      return state.map.get(id)
+    }
+  },
+  actions: {
+    async loadQuoteData(id) {
+      this.isLoading = true;
+
+      try {
+        const response = await getQuote(id);
+        this.map.set(response._id, response);
+      }
+      catch(error) {
+        this.error = error;
+      }
+      finally {
+        this.isLoading = false;
+      }
+    }
+  }
+})
 
 export const quoteModule = {
   namespaced: true,

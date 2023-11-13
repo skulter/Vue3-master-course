@@ -1,8 +1,6 @@
 <script>
-  import BaseNav from './BaseNav.vue';
-  import { createNamespacedHelpers } from "vuex";
-  
-  const { mapGetters } = createNamespacedHelpers("quote");
+  import { useQuoteStore } from '@/stores/quote';
+import BaseNav from './BaseNav.vue';
   export default {
     components: {
       BaseNav,
@@ -10,11 +8,11 @@
     computed: {
       pageTitle() {
         if(this.$route.name == "QuotePage") {
-          return this.quoteById(this.$route.params.id)?.author ?? "...loading"
+          const { quoteById } = useQuoteStore()
+          return quoteById(this.$route.params.id)?.author ?? "...loading"
         }
         return this.$route.meta.pageTitle
       },
-      ...mapGetters(['quoteById']),
       innerHeight() {
         return window.innerHeight
       }
