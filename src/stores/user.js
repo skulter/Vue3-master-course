@@ -29,12 +29,12 @@ const profiles = [
 ];
 
 const getRandomUserData = async (userId) => {
-  const avatar = await createAvatar(Math.floor(profiles.length * Math.random()))
+  const avatar = await createAvatar(profiles[Math.floor(profiles.length * Math.random())])
   return {
-    name: `Dante${Math.floor(Math.random() * 100)}`,
+    name: `Dante${userId}`,
     age: Math.floor(Math.random() * 100),
     userId,
-    avatar: avatar.toString()
+    avatar: await avatar.toDataUri()
   }
 };
 
@@ -60,7 +60,6 @@ export const useUserStore = defineStore("user", {
         this.loading = false;
         return;
       }
-
 
       const response = await new Promise(resolve => {
         setTimeout(() => {

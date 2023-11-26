@@ -18,8 +18,6 @@
 <script setup>
 import { storeToRefs } from 'pinia';
 import { useUserStore } from '../../stores/user'
-import { watch, onMounted,ref, computed, toRefs  } from "vue";
 const userStore = useUserStore();
 const { userData } = storeToRefs(userStore);
-
 </script>

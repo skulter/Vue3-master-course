@@ -6,14 +6,26 @@
         Error: {{ error }}
       </div>
       <div v-else-if="userData">
-        <h2 class="text-xl font-semibold mb-4">Edit User Profile</h2>
+        <h2 class="text-xl font-semibold mb-4">Edit User Id</h2>
         <form @submit.prevent="updateUser" class="space-y-4">
-          <!-- Form fields for user data -->
-          <!-- Example: -->
-          <!-- <input type="text" class="w-full p-2 border border-gray-300 rounded-md" /> -->
-          <button type="submit" class="w-full bg-blue-600 text-white rounded-md py-2 hover:bg-blue-700">Save Changes</button>
+          <input 
+            type="number"
+            min="1"
+            v-model="userIdInput"
+            class="w-full p-2 border border-gray-300 rounded-md" 
+          />
+          <button 
+            type="submit" 
+            class="w-full text-white rounded-md py-2"
+            :class="[submitDisabled ? 'bg-red-600 hover:bg-red-600' :'bg-blue-600 hover:bg-blue-700']"
+            :disabled="submitDisabled"
+            :aria-disabled="submitDisabled"
+          >
+            Save Changes
+          </button>
         </form>
         <button v-if="hasHistory" @click="clearUserHistory" class="mt-4 w-full bg-red-600 text-white rounded-md py-2 hover:bg-red-700">Clear History</button>
+        <UserProfile v-if="hasHistory"/>
       </div>
     </div>
   </div>
@@ -22,27 +34,26 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
-import { useUserStore } from '@/store/userStore';
+import { useUserStore } from '../../stores/user';
 import { storeToRefs } from 'pinia';
+import UserProfile from "./UserProfile.vue"
 
 const userStore = useUserStore();
 const { userData, loading, error, hasHistory } = storeToRefs(userStore);
-
-const formUserData = ref({ ...userData.value });
-
+const { fetchUserData, updateUserData, clearHistory } = userStore;
+const userIdInput = ref(userData.value)
+const submitDisabled = computed(() => userIdInput.value < 1)
 onMounted(() => {
   if (!userData.value) {
-    userStore.fetchUserData(123);
+    fetchUserData(123);
   }
 });
 
 const updateUser = () => {
-  userStore.updateUserData(formUserData.value);
+  updateUserData(userIdInput.value);
 };
 
 const clearUserHistory = () => {
-  userStore.clearHistory();
+  clearHistory();
 };
-
-const isHistoryAvailable = computed(() => hasHistory.value && userStore.userHistory.length > 0);
 </script>
