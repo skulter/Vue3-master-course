@@ -1,10 +1,8 @@
-const vue = Vue;
-
 const todos = [
   {
     id: 1,
     text: "vue is single page application",
-    done: false,
+    done: true,
   },
   {
     id: 2,
@@ -28,13 +26,14 @@ const data = {
 
 const vm = new Vue({
   el: "#app",
+  components: {
+    TodoForm,
+    TodoList,
+  },
   data,
   methods: {
-    addTodo: function (e) {
-      e.preventDefault();
-      const todo = this.form.todo;
+    addTodo: function (todo) {
       if (todo) {
-        const todoSize = Array.from(this.todos.entries()).length;
         const random = Math.random() * 10;
         this.todos.set(random, {
           id: random,
@@ -47,21 +46,25 @@ const vm = new Vue({
       }
     },
     removeTodo: function (id) {
-      this.todos.delete(id);
-      this.todos = new Map(this.todos);
+      if (this.todos.get(id)?.done) {
+        this.todos.delete(id);
+        this.todos = new Map(this.todos);
+      }
+    },
+    toggleCheckbox: function () {
+      console.log("toggle");
     },
   },
   template: /* html */ `
   <section>
-    <form @submit="addTodo">
-      <input name ="todo" v-model="form.todo" placeholder="입력해주세요.">
-    </form>
-      <div>
-        <ul v-for="todo in Array.from(todos.values())">
-          <li key="todo.id">{{todo.text}}</li>
-          <button @click="removeTodo(todo.id)">delete</button>
-        </ul>
-      </div>
+    <todo-form
+          @form-submit="addTodo"
+          :todo="form.todo"
+    />
+    <todo-list
+        @remove-todo="removeTodo"
+        :todos ="todos"
+    />
     </section>
   `,
 });
